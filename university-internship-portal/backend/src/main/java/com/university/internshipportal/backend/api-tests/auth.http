@@ -1,0 +1,45 @@
+### Register Student User
+# This request registers a new student. Change username/email for each new registration.
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "test_student_user2",
+    "email": "student.test2@example.com",
+    "password": "securepassword2",
+    "role": "STUDENT"
+}
+
+### Login Student User
+# @name studentLogin  -- This line allows us to reference this response later.
+# This request logs in the student and gets their JWT token.### Login Student User
+# @name studentLogin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "test_student_user2",
+    "password": "securepassword2"
+}
+### Register Admin User
+# This request registers a new admin. Change username/email for each new registration.
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "test_admin_user",
+    "email": "admin.test@example.com",
+    "password": "adminpassword",
+    "role": "ADMIN"
+}
+
+### Login Admin User
+# @name adminLogin  -- This line allows us to reference this response later.
+# This request logs in the the admin and gets their JWT token.
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "test_admin_user",
+    "password": "adminpassword"
+}

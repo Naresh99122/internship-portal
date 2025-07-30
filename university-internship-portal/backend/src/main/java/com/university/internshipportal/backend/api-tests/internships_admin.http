@@ -1,0 +1,60 @@
+# @no-cookie-jar
+# @admin_token = {{adminLogin.response.body.token}} -- This gets the token from the 'adminLogin' request in auth.http
+
+### Post New Internship
+# @name newInternship  -- Gives this response a name to reference its ID later
+POST http://localhost:8080/api/internships
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "title": "Software Engineer Intern",
+    "companyName": "TechCorp",
+    "location": "Remote",
+    "description": "Develop and maintain software solutions.",
+    "requirements": "Strong Java, Spring Boot, SQL skills.",
+    "responsibilities": "Coding, testing, code reviews.",
+    "skillsRequired": ["Java", "Spring Boot", "SQL", "REST APIs"],
+    "stipend": "Paid (INR 25,000)",
+    "duration": "6 months",
+    "startDate": "2025-09-01",
+    "endDate": "2026-02-28",
+    "applicationDeadline": "2025-08-20",
+    "status": "ACTIVE",
+    "contactEmail": "hr@techcorp.com",
+    "companyWebsite": "https://www.techcorp.com"
+}
+
+### Get All Internships (as Admin)
+GET http://localhost:8080/api/internships
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+
+### Update Internship Status
+# @internship_id = {{newInternship.response.body.id}} -- Gets ID from the 'newInternship' request above
+PUT http://localhost:8080/api/internships/{{internship_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "title": "Software Engineer Intern - Updated",
+    "companyName": "TechCorp",
+    "location": "Remote",
+    "description": "Updated description for software solutions.",
+    "requirements": "Strong Java, Spring Boot, SQL skills. Plus Kubernetes.",
+    "responsibilities": "Coding, testing, code reviews, deployment.",
+    "skillsRequired": ["Java", "Spring Boot", "SQL", "REST APIs", "Kubernetes"],
+    "stipend": "Paid (INR 28,000)",
+    "duration": "6 months",
+    "startDate": "2025-09-01",
+    "endDate": "2026-02-28",
+    "applicationDeadline": "2025-08-20",
+    "status": "CLOSED",  -- Change status to CLOSED
+    "contactEmail": "hr@techcorp.com",
+    "companyWebsite": "https://www.techcorp.com"
+}
+
+### Delete Internship
+# @internship_id_to_delete = 2 -- Manually set an ID if not using a previous response variable
+DELETE http://localhost:8080/api/internships/{{internship_id_to_delete}}
+Authorization: Bearer {{admin_token}}

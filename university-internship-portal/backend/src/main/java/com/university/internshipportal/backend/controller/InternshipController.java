@@ -20,14 +20,12 @@ public class InternshipController {
     @Autowired
     private InternshipService internshipService;
 
-    // Public endpoint for all active internships (accessible without login)
     @GetMapping("/public")
     public ResponseEntity<List<Internship>> getActiveInternshipsPublic() {
         List<Internship> internships = internshipService.getActiveInternships();
         return ResponseEntity.ok(internships);
     }
 
-    // Get all internships (requires login, can be filtered by role in service if needed)
     @GetMapping
     @PreAuthorize("hasAnyRole('STUDENT', 'MENTOR', 'ADMIN')")
     public ResponseEntity<List<Internship>> getAllInternships() {
@@ -35,7 +33,6 @@ public class InternshipController {
         return ResponseEntity.ok(internships);
     }
 
-    // Get a single internship by ID (accessible after login)
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('STUDENT', 'MENTOR', 'ADMIN')")
     public ResponseEntity<Internship> getInternshipById(@PathVariable Long id) {
@@ -43,7 +40,6 @@ public class InternshipController {
         return ResponseEntity.ok(internship);
     }
 
-    // Create a new internship (Admin only)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Internship> createInternship(
@@ -53,7 +49,6 @@ public class InternshipController {
         return new ResponseEntity<>(newInternship, HttpStatus.CREATED);
     }
 
-    // Update an existing internship (Admin only)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Internship> updateInternship(
@@ -63,7 +58,6 @@ public class InternshipController {
         return ResponseEntity.ok(updatedInternship);
     }
 
-    // Delete an internship (Admin only)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteInternship(@PathVariable Long id) {

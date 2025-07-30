@@ -2,7 +2,7 @@ package com.university.internshipportal.backend.model;
 
 import com.university.internshipportal.backend.model.enums.Role;
 import jakarta.persistence.*;
-import lombok.Data; // Keep @Data for other boilerplate if desired
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@Data // Keep this for other Lombok features like toString, equals, hashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -41,61 +41,45 @@ public class User {
     private LocalDateTime updatedAt;
 
     // --- MANUALLY ADDED GETTERS AND SETTERS FOR ALL FIELDS ---
-    // This explicitly guarantees the existence of these methods in the compiled class.
-    // This is the definitive fix for "Unimplemented method 'getUsername'".
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getUsername() { // <-- This is the method causing the error
+    public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getPasswordHash() {
         return passwordHash;
     }
-
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
-
     public Role getRole() {
         return role;
     }
-
     public void setRole(Role role) {
         this.role = role;
     }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }

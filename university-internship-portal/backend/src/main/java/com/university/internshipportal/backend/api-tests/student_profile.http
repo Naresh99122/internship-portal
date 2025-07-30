@@ -1,0 +1,31 @@
+# @no-cookie-jar
+# @student_token = {{studentLogin.response.body.token}} -- This line is problematic
+#
+# --- MANUAL TOKEN INPUT SECTION ---
+# AFTER logging in via auth.http, PASTE the actual token string below, replacing 'PASTE_YOUR_STUDENT_TOKEN_HERE'.
+# IMPORTANT: Ensure there are NO SPACES before or after the token string.
+@student_token_manual=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0X3N0dWRlbnRfdXNlcjIiLCJyb2xlIjoiU1RVREVOVCIsImlhdCI6MTc1Mzg1NTAzOSwiZXhwIjoxNzUzOTQxNDM5fQ.v799LRuOUjPjngH2ihfavaBQxsuJVvaLpq5uP3zbbmRJEnem-V7rgzpNtQg1ZAgXg7VgWEjA0hZODjfM7y3mtg
+# --- END MANUAL TOKEN INPUT SECTION ---
+
+
+### Get Student's Own Profile
+GET http://localhost:8080/api/students/profile
+Authorization: Bearer {{student_token_manual}}
+Accept: application/json
+
+### Update Student's Own Profile
+PUT http://localhost:8080/api/students/profile
+Content-Type: application/json
+Authorization: Bearer {{student_token_manual}} -- Use the manually set variable here
+
+{
+    "firstName": "Student",
+    "lastName": "User",
+    "major": "Computer Science",
+    "bio": "Updated bio for the test student user."
+}
+
+### Get Student's Matched Mentors
+GET http://localhost:8080/api/students/mentors/matched
+Authorization: Bearer {{student_token_manual}} -- Use the manually set variable here
+Accept: application/json

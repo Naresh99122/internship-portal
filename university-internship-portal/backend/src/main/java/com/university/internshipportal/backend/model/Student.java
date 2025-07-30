@@ -19,9 +19,9 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // CascadeType.ALL ensures user is saved/deleted with student
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user; // Links to the common User table
+    private User user;
 
     private String firstName;
     private String lastName;
@@ -29,16 +29,16 @@ public class Student {
     private String degreeProgram;
     private Integer graduationYear;
 
-    @Column(columnDefinition = "TEXT") // Use TEXT for potentially long descriptions
+    @Column(columnDefinition = "TEXT")
     private String bio;
 
-    @Column(columnDefinition = "TEXT") // Skills as comma-separated string
+    @Column(columnDefinition = "TEXT")
     private String skills;
 
-    @Column(columnDefinition = "TEXT") // Interests as comma-separated string
+    @Column(columnDefinition = "TEXT")
     private String interests;
 
-    private String resumeUrl; // URL to resume hosted elsewhere (e.g., S3, Google Drive)
+    private String resumeUrl;
     private String linkedinProfileUrl;
     private Double gpa;
     private String profilePictureUrl;
@@ -48,10 +48,9 @@ public class Student {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Constructor for initial profile creation
     public Student(User user) {
         this.user = user;
-        this.firstName = ""; // Initialize with empty strings
+        this.firstName = "";
         this.lastName = "";
         this.major = "";
         this.degreeProgram = "";

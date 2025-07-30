@@ -13,5 +13,4 @@ public interface InternshipRepository extends JpaRepository<Internship, Long> {
     List<Internship> findByCompanyNameContainingIgnoreCase(String companyName);
     List<Internship> findByLocationContainingIgnoreCase(String location);
     List<Internship> findByTitleContainingIgnoreCase(String title);
-    // You can add more complex queries here using @Query annotation if needed
 }

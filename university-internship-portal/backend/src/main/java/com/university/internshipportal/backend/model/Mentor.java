@@ -1,3 +1,4 @@
+
 package com.university.internshipportal.backend.model;
 
 import jakarta.persistence.*;
@@ -19,9 +20,9 @@ public class Mentor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // CascadeType.ALL ensures user is saved/deleted with mentor
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user; // Links to the common User table
+    private User user;
 
     private String firstName;
     private String lastName;
@@ -29,19 +30,19 @@ public class Mentor {
     private String company;
     private String jobTitle;
 
-    @Column(columnDefinition = "TEXT") // Expertise areas as comma-separated string
+    @Column(columnDefinition = "TEXT")
     private String expertiseAreas;
 
-    @Column(columnDefinition = "TEXT") // Bio for mentor
+    @Column(columnDefinition = "TEXT")
     private String bio;
 
-    @Column(columnDefinition = "TEXT") // Skills as comma-separated string
+    @Column(columnDefinition = "TEXT")
     private String skills;
 
-    @Column(columnDefinition = "TEXT") // Interests as comma-separated string
+    @Column(columnDefinition = "TEXT")
     private String interests;
 
-    @Column(columnDefinition = "TEXT") // Availability description (e.g., "Mon-Wed evenings")
+    @Column(columnDefinition = "TEXT")
     private String availability;
 
     private String linkedinProfileUrl;
@@ -52,7 +53,6 @@ public class Mentor {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Constructor for initial profile creation
     public Mentor(User user) {
         this.user = user;
         this.firstName = "";

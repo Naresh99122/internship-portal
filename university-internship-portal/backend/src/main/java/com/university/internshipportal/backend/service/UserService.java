@@ -1,17 +1,16 @@
 package com.university.internshipportal.backend.service;
 
-import com.university.internshipportal.backend.exception.ResourceNotFoundException; // Ensure this is imported
-import com.university.internshipportal.backend.model.User; // Ensure this is imported
-import com.university.internshipportal.backend.repository.UserRepository; // Ensure this is imported
+import com.university.internshipportal.backend.exception.ResourceNotFoundException;
+import com.university.internshipportal.backend.model.User;
+import com.university.internshipportal.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service; // CRITICAL: This annotation
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional; // Ensure Optional is imported
+import java.util.Optional;
 
-
-@Service // <-- This annotation tells Spring to create a bean for this class
+@Service
 public class UserService {
 
     @Autowired

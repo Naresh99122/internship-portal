@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal; // Represents the currently authenticated user
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -19,16 +19,13 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    // Get student's own profile
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/profile")
     public ResponseEntity<Student> getStudentProfile(Principal principal) {
-        // Principal.getName() gives the username of the authenticated user
         Student student = studentService.getStudentProfileByUsername(principal.getName());
         return ResponseEntity.ok(student);
     }
 
-    // Update student's own profile
     @PreAuthorize("hasRole('STUDENT')")
     @PutMapping("/profile")
     public ResponseEntity<Student> updateStudentProfile(
@@ -38,7 +35,6 @@ public class StudentController {
         return ResponseEntity.ok(updatedStudent);
     }
 
-    // Get matched mentors for the authenticated student
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/mentors/matched")
     public ResponseEntity<List<MentorStudentMatch>> getMatchedMentors(Principal principal) {
@@ -47,8 +43,6 @@ public class StudentController {
         return ResponseEntity.ok(matches);
     }
 
-    // Get a specific student's public profile (e.g., for mentor to view)
-    // Note: You might want to filter what's visible publicly
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('STUDENT', 'MENTOR', 'ADMIN')")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {

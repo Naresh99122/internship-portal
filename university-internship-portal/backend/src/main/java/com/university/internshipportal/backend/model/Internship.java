@@ -39,17 +39,17 @@ public class Internship {
     @Column(columnDefinition = "TEXT")
     private String responsibilities;
 
-    @Column(columnDefinition = "TEXT") // Skills as comma-separated string
+    @Column(columnDefinition = "TEXT")
     private String skillsRequired;
 
     @Column(length = 50)
-    private String stipend; // e.g., "Paid", "Unpaid", "$15/hr"
+    private String stipend;
 
     @Column(length = 50)
-    private String duration; // e.g., "3 months", "Summer 2025"
+    private String duration;
 
     @Column(name = "start_date")
-    private LocalDate startDate; // Use LocalDate for dates without time
+    private LocalDate startDate;
 
     @Column(name = "end_date")
     private LocalDate endDate;
@@ -59,7 +59,7 @@ public class Internship {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posted_by", referencedColumnName = "id", nullable = false)
-    private User postedBy; // User (Admin) who posted the internship
+    private User postedBy;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

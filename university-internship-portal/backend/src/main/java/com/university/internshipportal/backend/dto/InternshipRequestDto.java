@@ -10,7 +10,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.List; // For skillsRequired (frontend sends list)
+import java.util.List;
 
 @Data
 public class InternshipRequestDto {
@@ -34,7 +34,7 @@ public class InternshipRequestDto {
 
     private String responsibilities;
 
-    private List<String> skillsRequired; // Frontend sends List, convert to String in service
+    private List<String> skillsRequired;
 
     @Size(max = 50, message = "Stipend information too long")
     private String stipend;
@@ -52,7 +52,7 @@ public class InternshipRequestDto {
     private LocalDate applicationDeadline;
 
     @NotNull(message = "Internship status cannot be null")
-    private InternshipStatus status; // Admin sets status
+    private InternshipStatus status;
 
     @Email(message = "Invalid contact email format")
     @Size(max = 100, message = "Contact email too long")

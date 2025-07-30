@@ -10,7 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "mentor_student_matches", uniqueConstraints = { // Ensure unique mentor-student pair
+@Table(name = "mentor_student_matches", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"student_id", "mentor_id"})
 })
 @Data
@@ -30,16 +30,16 @@ public class MentorStudentMatch {
     private Mentor mentor;
 
     @Column(name = "match_score", nullable = false)
-    private Double matchScore; // Score from 0.0 to 100.0
+    private Double matchScore;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MatchStatus status; // Suggested, Accepted, Active, Completed etc.
+    private MatchStatus status;
 
     @Column(name = "matched_at", updatable = false)
     @CreationTimestamp
     private LocalDateTime matchedAt;
 
     @Column(columnDefinition = "TEXT")
-    private String notes; // Notes about the match or interaction
+    private String notes;
 }

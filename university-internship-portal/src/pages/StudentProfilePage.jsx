@@ -1,6 +1,6 @@
 // src/pages/StudentProfilePage.jsx
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Box, TextField, Button, CircularProgress, Alert, Paper, Chip, Grid } from '@mui/material'; // <-- Add Grid here
+import { Container, Typography, Box, TextField, Button, CircularProgress, Alert, Paper, Chip, Grid } from '@mui/material';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -23,24 +23,30 @@ function StudentProfilePage() {
     profilePictureUrl: ''
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null); // Initialize as null
   const [success, setSuccess] = useState('');
   const [newSkill, setNewSkill] = useState('');
   const [newInterest, setNewInterest] = useState('');
 
   useEffect(() => {
     if (user?.role !== 'STUDENT') {
-      navigate('/login'); // Redirect if not a student or not logged in
+      navigate('/login');
       return;
     }
 
     const fetchProfile = async () => {
       try {
         const response = await api.get('/students/profile');
-        setProfile(response.data);
+        const fetchedProfile = response.data;
+        setProfile({
+          ...fetchedProfile,
+          skills: fetchedProfile.skills ? fetchedProfile.skills.split(',').map(s => s.trim()).filter(s => s.length > 0) : [],
+          interests: fetchedProfile.interests ? fetchedProfile.interests.split(',').map(s => s.trim()).filter(s => s.length > 0) : [],
+        });
       } catch (err) {
         console.error('Error fetching student profile:', err);
-        setError('Failed to load profile. Please try again.');
+        // Set error state, assuming the error has a message or is a general string
+        setError(err.response?.data?.message || 'Failed to load profile. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -61,7 +67,7 @@ function StudentProfilePage() {
   };
 
   const handleSkillDelete = (skillToDelete) => {
-    setProfile(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skillToDelete) }));
+    setProfile(prev => ({ ...prev, skills: profile.skills.filter(s => s !== skillToDelete) }));
   };
 
   const handleInterestAdd = () => {
@@ -72,7 +78,7 @@ function StudentProfilePage() {
   };
 
   const handleInterestDelete = (interestToDelete) => {
-    setProfile(prev => ({ ...prev, interests: prev.interests.filter(i => i !== interestToDelete) }));
+    setProfile(prev => ({ ...prev, interests: profile.interests.filter(i => i !== interestToDelete) }));
   };
 
   const handleSubmit = async (e) => {
@@ -80,7 +86,12 @@ function StudentProfilePage() {
     setError('');
     setSuccess('');
     try {
-      await api.put('/students/profile', profile);
+      const dataToSend = {
+        ...profile,
+        skills: profile.skills.join(','),
+        interests: profile.interests.join(','),
+      };
+      await api.put('/students/profile', dataToSend);
       setSuccess('Profile updated successfully!');
     } catch (err) {
       console.error('Error updating student profile:', err);
@@ -88,8 +99,28 @@ function StudentProfilePage() {
     }
   };
 
-  if (loading) return <Container sx={{ py: 4, display: 'flex', justifyContent: 'center' }}><CircularProgress /></Container>;
-  if (error && !profile.firstName) return <Container sx={{ py: 4 }}><Alert severity="error">{error}</Alert></Container>;
+  // --- FIX START: Corrected JSX for loading and error states ---
+  if (loading) {
+    return (
+      <Container sx={{ py: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{ ml: 2 }}>Loading profile...</Typography>
+      </Container>
+    );
+  }
+
+  // If there's an error and profile data hasn't loaded (e.g., initial fetch failed)
+  // And to avoid the error on line 107 `error && !profile.firstName` was intended for initial load error
+  // If profile is null or undefined, an alert
+  if (error && (!profile || !profile.firstName)) {
+    return (
+      <Container sx={{ py: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
+  // --- FIX END ---
+
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
@@ -97,7 +128,8 @@ function StudentProfilePage() {
         <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main', mb: 3 }}>
           Your Student Profile
         </Typography>
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {/* Display success/error messages within the main content if already loaded */}
+        {error && profile && profile.firstName && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
@@ -115,10 +147,10 @@ function StudentProfilePage() {
               <TextField fullWidth label="Degree Program" name="degreeProgram" value={profile.degreeProgram} onChange={handleChange} variant="outlined" />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="Graduation Year" name="graduationYear" type="number" value={profile.graduationYear} onChange={handleChange} variant="outlined" />
+              <TextField fullWidth label="Graduation Year" name="graduationYear" type="number" value={profile.graduationYear || ''} onChange={handleChange} variant="outlined" />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label="GPA" name="gpa" type="number" inputProps={{ step: "0.01" }} value={profile.gpa} onChange={handleChange} variant="outlined" />
+              <TextField fullWidth label="GPA" name="gpa" type="number" inputProps={{ step: "0.01" }} value={profile.gpa || ''} onChange={handleChange} variant="outlined" />
             </Grid>
             <Grid item xs={12}>
               <TextField fullWidth label="Bio" name="bio" value={profile.bio} onChange={handleChange} multiline rows={4} variant="outlined" />

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 public class InternshipService {
@@ -19,7 +21,7 @@ public class InternshipService {
     @Autowired
     private InternshipRepository internshipRepository;
     @Autowired
-    private UserService userService; // To get User (Admin) who posted
+    private UserService userService;
 
     public List<Internship> getAllInternships() {
         return internshipRepository.findAll();
@@ -36,22 +38,22 @@ public class InternshipService {
 
     @Transactional
     public Internship createInternship(InternshipRequestDto requestDto, String postedByUsername) {
-        User postedBy = userService.getUserByUsername(postedByUsername); // Get the admin user
+        User postedBy = userService.getUserByUsername(postedByUsername);
 
         Internship internship = new Internship();
         mapDtoToInternship(requestDto, internship);
-        internship.setPostedBy(postedBy); // Set the posting admin
-        internship.setStatus(Optional.ofNullable(requestDto.getStatus()).orElse(InternshipStatus.PENDING_APPROVAL)); // Default or provided status
+        internship.setPostedBy(postedBy);
+        internship.setStatus(Optional.ofNullable(requestDto.getStatus()).orElse(InternshipStatus.PENDING_APPROVAL));
 
         return internshipRepository.save(internship);
     }
 
     @Transactional
     public Internship updateInternship(Long id, InternshipRequestDto requestDto) {
-        Internship internship = getInternshipById(id); // Throws if not found
+        Internship internship = getInternshipById(id);
 
         mapDtoToInternship(requestDto, internship);
-        internship.setStatus(requestDto.getStatus()); // Status can be updated by admin
+        internship.setStatus(requestDto.getStatus());
 
         return internshipRepository.save(internship);
     }
@@ -64,7 +66,6 @@ public class InternshipService {
         internshipRepository.deleteById(id);
     }
 
-    // Helper method to map DTO fields to Internship entity
     private void mapDtoToInternship(InternshipRequestDto dto, Internship internship) {
         Optional.ofNullable(dto.getTitle()).ifPresent(internship::setTitle);
         Optional.ofNullable(dto.getCompanyName()).ifPresent(internship::setCompanyName);
@@ -80,9 +81,14 @@ public class InternshipService {
         Optional.ofNullable(dto.getContactEmail()).ifPresent(internship::setContactEmail);
         Optional.ofNullable(dto.getCompanyWebsite()).ifPresent(internship::setCompanyWebsite);
 
-        // Convert List<String> skillsRequired to comma-separated String
         if (dto.getSkillsRequired() != null) {
-            internship.setSkillsRequired(String.join(",", dto.getSkillsRequired()));
+            String skillsCsv = dto.getSkillsRequired().stream()
+                                    .map(String::trim)
+                                    .filter(s -> !s.isEmpty())
+                                    .collect(Collectors.joining(","));
+            internship.setSkillsRequired(skillsCsv);
+        } else {
+            internship.setSkillsRequired("");
         }
     }
 }

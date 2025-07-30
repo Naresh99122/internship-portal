@@ -14,17 +14,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-@PreAuthorize("hasRole('ADMIN')") // All methods in this controller require ADMIN role
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired
-    private UserService userService; // To manage users
+    private UserService userService;
     @Autowired
-    private InternshipService internshipService; // To manage all internships (even inactive)
+    private InternshipService internshipService;
     @Autowired
-    private MatchingService matchingService; // To trigger matching algorithm
+    private MatchingService matchingService;
 
-    // --- User Management ---
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -37,20 +36,12 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
-    // You can add endpoints to update user roles or deactivate accounts here if needed.
-    // Example: @PutMapping("/users/{id}/role")
-    // Example: @PutMapping("/users/{id}/status")
-
-    // --- Internship Management (Admin has full control) ---
-    // Note: InternshipController already has methods for create, update, delete
-    // Admins implicitly use those. This endpoint is just an example if needed.
     @GetMapping("/internships/all")
     public ResponseEntity<List<Internship>> getAllInternshipsForAdmin() {
         List<Internship> internships = internshipService.getAllInternships();
         return ResponseEntity.ok(internships);
     }
 
-    // --- Matching Algorithm Trigger ---
     @PostMapping("/matching/run")
     public ResponseEntity<String> triggerMentorMatching() {
         matchingService.runMentorMatchingAlgorithm();

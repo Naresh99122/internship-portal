@@ -1,3 +1,4 @@
+
 package com.university.internshipportal.backend.service;
 
 import com.university.internshipportal.backend.dto.ApplicationRequestDto;
@@ -20,9 +21,9 @@ public class ApplicationService {
     @Autowired
     private ApplicationRepository applicationRepository;
     @Autowired
-    private StudentService studentService; // To get student by username/id
+    private StudentService studentService;
     @Autowired
-    private InternshipService internshipService; // To get internship by id
+    private InternshipService internshipService;
 
     @Transactional
     public Application applyForInternship(String studentUsername, ApplicationRequestDto requestDto) {
@@ -37,7 +38,7 @@ public class ApplicationService {
         application.setStudent(student);
         application.setInternship(internship);
         application.setCoverLetter(requestDto.getCoverLetter());
-        application.setStatus(ApplicationStatus.PENDING); // Initial status is PENDING
+        application.setStatus(ApplicationStatus.PENDING);
 
         return applicationRepository.save(application);
     }
@@ -52,7 +53,6 @@ public class ApplicationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Application", "id", applicationId));
     }
 
-    // Admin/Mentor/Employer can update application status
     @Transactional
     public Application updateApplicationStatus(Long applicationId, ApplicationRequestDto requestDto) {
         Application application = getApplicationById(applicationId);

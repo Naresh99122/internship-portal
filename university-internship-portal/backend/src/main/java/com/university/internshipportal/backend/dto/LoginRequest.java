@@ -1,15 +1,13 @@
 package com.university.internshipportal.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
 public class LoginRequest {
+    @NotBlank
+    private String username;
 
-    public String getUsername() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
-    }
-
-    public String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
-    }
-    
+    @NotBlank
+    private String password;
 }
